@@ -1,9 +1,12 @@
+export const RU_HEIGHT = 44.45;
+export const RACK_BASE_CLEARANCE = 40;
+
 export const EQUIPMENT_PRESETS = {
-  cabinet: { width: 600, depth: 1000, height: 2200, color2d: "#384a5f", color3d: "#617e98", label: "Network Cabinet" },
-  crac: { width: 900, depth: 1200, height: 2400, color2d: "#668c4d", color3d: "#84aa69", label: "CRAC Unit" },
-  switch: { width: 450, depth: 450, height: 220, color2d: "#6a5b95", color3d: "#8d80b8", label: "Network Switch" },
-  ups: { width: 700, depth: 900, height: 1600, color2d: "#a85b3c", color3d: "#cb7e5d", label: "UPS" },
-  pdu: { width: 300, depth: 300, height: 1800, color2d: "#aa8b2b", color3d: "#c8aa4b", label: "PDU" },
+  cabinet: { width: 600, depth: 1000, height: 2200, color2d: "#384a5f", color3d: "#617e98", label: "Network Cabinet", mountable: false, rackUnits: 42 },
+  crac: { width: 900, depth: 1200, height: 2400, color2d: "#668c4d", color3d: "#84aa69", label: "CRAC Unit", mountable: false, rackUnits: 0 },
+  switch: { width: 450, depth: 450, height: 44.45, color2d: "#6a5b95", color3d: "#8d80b8", label: "Network Switch", mountable: true, rackUnits: 1 },
+  ups: { width: 440, depth: 700, height: 133.35, color2d: "#a85b3c", color3d: "#cb7e5d", label: "UPS", mountable: true, rackUnits: 3 },
+  pdu: { width: 440, depth: 220, height: 88.9, color2d: "#aa8b2b", color3d: "#c8aa4b", label: "PDU", mountable: true, rackUnits: 2 },
 };
 
 export function clamp(value, min, max) {
@@ -100,6 +103,56 @@ export function getTraySegments(tray) {
     });
   }
   return segments;
+}
+
+export function getTrayAnchor(tray) {
+  const segments = getTraySegments(tray);
+  if (segments.length === 0) {
+    return { x: tray.x, y: tray.y, z: tray.z };
+  }
+  const first = segments[0];
+  return {
+    x: (first.start.x + first.end.x) / 2,
+    y: (first.start.y + first.end.y) / 2,
+    z: tray.z,
+  };
+}
+
+export function normalizeConnection(connection) {
+  if ("fromKind" in connection && "toKind" in connection) {
+    return connection;
+  }
+  return {
+    ...connection,
+    fromKind: "equipment",
+    fromIndex: connection.from,
+    toKind: "equipment",
+    toIndex: connection.to,
+  };
+}
+
+export function getConnectionAnchor(ref, equipment, trays) {
+  if (!ref) return null;
+  if (ref.kind === "equipment") {
+    const item = equipment[ref.index];
+    if (!item) return null;
+    const mountedCabinet =
+      item.mountedIn !== null && item.mountedIn !== undefined ? equipment[item.mountedIn] : null;
+    if (mountedCabinet && mountedCabinet.type === "cabinet") {
+      return {
+        x: mountedCabinet.x,
+        y: mountedCabinet.y,
+        z: ((item.rackStart || 1) - 1) * RU_HEIGHT + item.height / 2 + RACK_BASE_CLEARANCE,
+      };
+    }
+    return { x: item.x, y: item.y, z: item.height };
+  }
+  if (ref.kind === "tray") {
+    const tray = trays[ref.index];
+    if (!tray) return null;
+    return getTrayAnchor(tray);
+  }
+  return null;
 }
 
 export function isPointInsidePolygon(point, polygon) {
