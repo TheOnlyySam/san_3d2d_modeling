@@ -1,0 +1,63 @@
+# Page Setup
+
+1- Allowing flexibility in the 2d view as well as 3d view and
+
+# Room and Walls
+
+1- Multi Room/Layout capabilites and lables
+
+2- Free drawing instead of hardcoded sizings (allow for area to be calculated from the drawings)
+
+3- adding width to the walls in hardcoded topology and in free drawing as well
+
+4- Show dimensions in the 2D plan (Workspace area) in room after adding the doors/windows etc.. and calculate them in the view as well
+
+5- Allow doors to be draggable and reflect changes in the property as well as the workspace area
+
+6- Allow door options (Center, Left and Right)
+
+7- On doors add Opening directions (inside, outside and Left, Right)
+
+8- Adding dynamic ceiling view with the same config as the raised floors, and allowing each tile to be configurable
+
+ 
+
+# Main Door and Raised Floors
+
+1- Removing raised floor from the Room View and adding a new view Raised Floor View containing
+
+- Panel Size (600mm Default)
+- Raised Floor Elevation
+
+2- When adding a door, we get to choose the elevation and it’s dynamic instead of hardcoded
+
+3- Grace Period after entering the door and then the raised floors will start after the steps (pedestal) 
+
+4- Windows Configuration will take control from 2nd note
+
+5- Error handling incase the window thickness is larger than the wall thickness (same applies for everything else)
+
+# Equipment (Network Hardware)
+
+1- Network Hardware change to Facility Equipment
+
+2- Room dimensions awareness for the equipment (X, Y) coords
+
+3- Adding Aisle Containment and configuration which is the following
+
+- Number of racks (ex: 3, 4, 6) with its configuration (width, depth, height) for each rack
+- Number of rows  (ex: 2, 3, 1), each row will contain number of racks selected as mentioned in point 1
+- Aisle Containment width (For rows, and what’s the width between them)
+- Aisle containment height
+
+4- Aisle containment type (CAC or HAC)
+
+5- Understanding of CAC and HAC and their workflows. (each type changes the airflow, one is intake and Exhaust
+
+6- Adding a network switch should be more dynamic and interractive
+
+7- Adding a button that checks all panels, in case there is empty space in a panel it will automtically seal it.
+
+8- All facility equipment should be more understood and well rounded to real life actual work implementation as well as 3d models
+
+9- For cables, they must be added after Tray Cables are entered, and it follows that tray cable
